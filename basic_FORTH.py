@@ -1,9 +1,18 @@
 from __future__ import print_function
 
 MAXINT = (2 ** 32) - 1
+MININT = MAXINT * -1
 
 
-def forth_interpreter(input_string, trace = False):
+def is_valid_number(n):
+    try:
+        n = int(n)
+    except ValueError:
+        return False
+    return MININT <= n <= MAXINT
+
+
+def forth_interpreter(input_string, trace=False):
     input_list = input_string.split()
     input_list = input_list[::-1]
 
@@ -21,17 +30,14 @@ def forth_interpreter(input_string, trace = False):
         elif TOP == "DUP":
             if results:
                 results.append(results[-1])
-        elif TOP.isdigit():
+        elif is_valid_number(TOP):
             n = int(TOP)
-            if 0 <= n <= MAXINT:
-                results.append(n)
-            else:
-                return -1
+            results.append(n)
         elif TOP == "+":
             if len(results) < 2:
                 return -1
             sum_ = results[-1] + results[-2]
-            if sum_ > MAXINT:
+            if not is_valid_number(sum_):
                 return -1
             else:
                 results.pop()
@@ -40,18 +46,18 @@ def forth_interpreter(input_string, trace = False):
         elif TOP == "-":
             if len(results) < 2:
                 return -1
-            diff = results[-1] - results[-2]
-            if diff < 0:
+            diff_ = results[-1] - results[-2]
+            if not is_valid_number(diff_):
                 return -1
             else:
                 results.pop()
                 results.pop()
-                results.append(diff)
+                results.append(diff_)
         elif TOP == "*":
             if len(results) < 2:
                 return -1
             prod_ = results[-1] * results[-2]
-            if prod_ > MAXINT:
+            if not is_valid_number(prod_):
                 return -1
             else:
                 results.pop()
@@ -61,7 +67,7 @@ def forth_interpreter(input_string, trace = False):
             if len(results) < 2:
                 return -1
             int_div_ = results[-1] // results[-2]
-            if int_div_ > MAXINT:
+            if not is_valid_number(int_div_):
                 return -1
             else:
                 results.pop()

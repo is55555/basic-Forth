@@ -1,6 +1,7 @@
 # Toy FORTH interpreter.
  
 MAXINT: 2^32 - 1
+MININT: -MAXINT
 
 By default, tracing is off (set to False).
 
