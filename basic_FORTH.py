@@ -3,12 +3,15 @@ from __future__ import print_function
 MAXINT = (2 ** 32) - 1
 
 
-def forth_interpreter(input_string):
+def forth_interpreter(input_string, trace = False):
     input_list = input_string.split()
     input_list = input_list[::-1]
 
     results = []
     while input_list:
+        if trace:
+            print("INPUT tape:", input_list)
+            print("OUTPUT tape:", results)
         TOP = input_list.pop()
         if TOP == "POP":
             if results:
@@ -45,6 +48,10 @@ def forth_interpreter(input_string):
             else:
                 return -1
 
+    if trace:
+        print("INPUT tape:", input_list)
+        print("OUTPUT tape:", results)
+
     if not results:
         return -1
     else:
@@ -54,3 +61,6 @@ if __name__ == "__main__":
     print(forth_interpreter("5 6 + -"), "== -1 (error)")  # error
     print(forth_interpreter("3 DUP 5 - -"), "== -1 (error)")  # error
     print(forth_interpreter('18 DUP 4 POP 5 DUP + DUP + - +'), "== 20")  # 20
+
+    print(forth_interpreter('18 DUP 4 POP 5 DUP + DUP + - +', trace=True), "== 20")  # 20
+
