@@ -21,6 +21,12 @@ def forth_interpreter(input_string, trace = False):
         elif TOP == "DUP":
             if results:
                 results.append(results[-1])
+        elif TOP.isdigit():
+            n = int(TOP)
+            if 0 <= n <= MAXINT:
+                results.append(n)
+            else:
+                return -1
         elif TOP == "+":
             if len(results) < 2:
                 return -1
@@ -41,12 +47,26 @@ def forth_interpreter(input_string, trace = False):
                 results.pop()
                 results.pop()
                 results.append(diff)
-        elif TOP.isdigit():
-            n = int(TOP)
-            if 0 <= n <= MAXINT:
-                results.append(n)
-            else:
+        elif TOP == "*":
+            if len(results) < 2:
                 return -1
+            prod_ = results[-1] * results[-2]
+            if prod_ > MAXINT:
+                return -1
+            else:
+                results.pop()
+                results.pop()
+                results.append(prod_)
+        elif TOP == "/":  # integer division
+            if len(results) < 2:
+                return -1
+            int_div_ = results[-1] // results[-2]
+            if int_div_ > MAXINT:
+                return -1
+            else:
+                results.pop()
+                results.pop()
+                results.append(int_div_)
 
     if trace:
         print("INPUT tape:", input_list)
